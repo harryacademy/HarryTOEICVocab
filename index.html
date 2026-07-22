@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOEIC Vocabulary Practice — Harry Academy</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="brand-strip"></div>
+<div class="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <img src="assets/logo.png" alt="Harry Academy" class="logo-img">
+      <span class="brand-name">TOEIC <em>Vocabulary</em></span>
+    </div>
+    <nav class="nav">
+      <button class="nav-btn active" data-view="home">Trang chủ</button>
+      <button class="nav-btn" data-view="wordlist">Flashcard</button>
+      <button class="nav-btn" data-view="quiz">Quiz</button>
+      <button class="nav-btn" data-view="record">Tiến độ</button>
+    </nav>
+  </header>
+
+  <!-- HOME -->
+  <section id="view-home" class="view active">
+    <div class="hero">
+      <div class="hero-panel">
+        <span class="eyebrow">Harry Academy · Luyện thi TOEIC</span>
+        <h1>Chinh phục <span class="accent-blue">từ vựng TOEIC</span> mỗi ngày</h1>
+        <p class="lead">Học và ôn tập <b id="homeTotalWords">0</b> từ vựng TOEIC theo 14 chủ đề công sở &amp; đời sống, với flashcard, quiz trắc nghiệm đa dạng, và theo dõi tiến độ học tập.</p>
+        <div class="hero-actions">
+          <button class="btn btn-brand btn-lg" onclick="showView('wordlist')">▶ Học Flashcard</button>
+          <button class="btn btn-ghost btn-lg" style="background:transparent;border-color:rgba(255,255,255,0.35);color:#fff;" onclick="showView('quiz')">Làm Quiz</button>
+        </div>
+        <div id="homeStats"></div>
+      </div>
+    </div>
+    <div class="section-label" style="margin-top:40px;">Chủ đề từ vựng</div>
+    <div class="cat-grid" id="catGrid"></div>
+  </section>
+
+  <!-- WORDLIST / FLASHCARDS -->
+  <section id="view-wordlist" class="view">
+    <div class="card-box" id="wordlistIntro">
+      <h2 style="margin-top:0;" class="section-title">Flashcard từ vựng</h2>
+      <p class="muted">Từ được chọn ngẫu nhiên, ưu tiên các từ chưa biết / chưa thuộc. Bấm ✓ hoặc ✕ để xem nghĩa tiếng Việt — khi bấm ✓ bạn cần gõ lại đúng từ tiếng Anh để xác nhận.</p>
+      <div class="field-row">
+        <span class="muted">Chủ đề:</span>
+        <div class="chip-row" id="catChips" style="margin-top:8px;"></div>
+        <p class="muted" id="catFilterHint" style="margin-top:8px;"></p>
+      </div>
+      <div class="field-row">
+        <label class="muted">Số thẻ mỗi lượt:
+          <select id="sessionSize">
+            <option value="15">15</option>
+            <option value="25" selected>25</option>
+            <option value="40">40</option>
+          </select>
+        </label>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:20px;">
+        <button class="btn btn-brand btn-lg" id="startFlashBtn">▶ Bắt đầu ôn từ vựng</button>
+        <button class="btn btn-ghost btn-lg" id="reviewWrongBtn">Ôn các từ cần luyện lại</button>
+      </div>
+    </div>
+    <div class="card card-box" id="flashArea" style="display:none;">
+      <div class="flash-progress" id="flashProgress"></div>
+      <div class="flashcard" id="flashcard">
+        <span class="flash-cat" id="flashCat"></span>
+        <span class="badge-mark" id="flashBadge"></span>
+        <div class="flash-word" id="flashWord"></div>
+        <div class="flash-pos" id="flashPos"></div>
+        <div class="flash-vi" id="flashVi" style="display:none;"></div>
+        <button class="speak-btn" id="speakBtn">▶ Nghe phát âm</button>
+        <div class="know-row" id="knowRow">
+          <button class="btn-cross" id="btnCross">✕</button>
+          <button class="btn-tick" id="btnTick">✓</button>
+        </div>
+        <div class="write-check" id="writeCheckBox" style="display:none;">
+          <p class="muted" style="margin:0 0 8px;">Gõ lại từ tiếng Anh để xác nhận:</p>
+          <input type="text" id="writeCheckInput" class="write-check-input" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Nhập từ...">
+          <button class="btn btn-primary btn-block" id="writeCheckSubmit" style="margin-top:10px;">Kiểm tra</button>
+        </div>
+        <button class="btn btn-primary next-btn" id="nextCardBtn" style="display:none;">Từ tiếp theo →</button>
+      </div>
+    </div>
+    <div class="card-box" id="flashDoneBox" style="display:none;">
+      <h2 style="margin-top:0;" class="section-title">Hoàn thành lượt ôn tập!</h2>
+      <p id="flashDoneSummary" class="muted"></p>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:20px;">
+        <button class="btn btn-brand" id="flashDoneRestart">Ôn tiếp</button>
+        <button class="btn btn-ghost" id="flashDoneHome">Về danh sách</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="view-quiz" class="view">
+    <div class="card-box" id="quizIntro">
+      <h2 style="margin-top:0;" class="section-title">Quiz — 30 câu hỏi</h2>
+      <p class="muted">Câu hỏi được tạo ngẫu nhiên từ toàn bộ 420 từ vựng, với nhiều dạng bài khác nhau (trắc nghiệm nghĩa, điền từ vào câu, tìm từ khác loại, sắp xếp chữ cái, nghe và chọn nghĩa...). Sau mỗi câu có giải thích bằng tiếng Việt. Thời gian làm bài: 15 phút.</p>
+      <button class="btn btn-brand btn-lg" id="startQuizBtn" style="margin-top:16px;">▶ Bắt đầu Quiz</button>
+    </div>
+    <div id="quizArea" style="display:none;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <div class="q-progress" id="quizProgress"></div>
+        <div id="quizTimer" class="quiz-timer">15:00</div>
+      </div>
+      <div id="quizQuestionBox"></div>
+    </div>
+    <div class="card card-box" id="quizResultBox" style="display:none;">
+      <h2 style="margin-top:0; padding:32px 32px 0;" class="section-title">Kết quả Quiz</h2>
+      <div id="quizResultSummary"></div>
+      <div class="review-block">
+        <h3>Các từ đã trả lời sai</h3>
+        <div id="quizWrongList"></div>
+      </div>
+      <div class="results-actions">
+        <button class="btn btn-brand" id="quizRestartBtn">Làm quiz mới</button>
+        <button class="btn btn-ghost" id="quizHomeBtn">Về trang chủ</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RECORD -->
+  <section id="view-record" class="view">
+    <div class="card-box">
+      <h2 style="margin-top:0;" class="section-title">Tiến độ học tập</h2>
+      <div id="recordStats"></div>
+
+      <h3 class="section-label" style="margin-top:8px;">Từ hay sai nhất</h3>
+      <div id="wrongTopList" style="margin-bottom:32px;"></div>
+
+      <h3 class="section-label">Từ cần ôn lại</h3>
+      <div id="needReviewList" style="margin-bottom:8px;"></div>
+      <button class="btn btn-ghost" id="goReviewBtn" style="margin-top:12px;">Ôn ngay các từ này →</button>
+
+      <h3 class="section-label" style="margin-top:32px;">Lịch sử Quiz</h3>
+      <div id="quizHistoryList" style="margin-bottom:24px;"></div>
+
+      <button class="btn btn-ghost" id="resetProgressBtn" style="color:var(--state-danger); border-color:var(--state-danger-soft);">Xoá toàn bộ tiến độ</button>
+    </div>
+  </section>
+
+  <footer class="site">
+    <span>Harry Academy — Speak to the World</span>
+    <span>TOEIC Vocabulary Practice</span>
+  </footer>
+</div>
+
+<!-- Modal (replaces native alert/confirm) -->
+<div id="modalOverlay" style="display:none; position:fixed; inset:0; background:rgba(10,11,14,0.5); align-items:center; justify-content:center; z-index:100; padding:20px;">
+  <div class="card" style="max-width:380px; padding:28px; text-align:center;">
+    <p id="modalMessage" style="font-size:var(--text-body-md); color:var(--text-heading); margin-bottom:20px;"></p>
+    <div id="modalActions" style="display:flex; gap:10px; justify-content:center;"></div>
+  </div>
+</div>
+
+<script src="data/vocab.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
