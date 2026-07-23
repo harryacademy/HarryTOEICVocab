@@ -9,7 +9,7 @@ function shuffleCopy(arr){ const c=arr.slice(); shuffleArr(c); return c; }
 const POS_LABEL = { n:"danh từ", v:"động từ", adj:"tính từ", phrase:"cụm từ" };
 
 /* ---------------- word bank ---------------- */
-const WORDS = RAW_WORDS.map((r,i)=>({ id:"w"+i, term:r[0], pos:r[1], vi:r[2], cat:r[3] }));
+const WORDS = RAW_WORDS.map((r,i)=>({ id:"w"+i, term:r[0], pos:r[1], vi:r[2], cat:r[3], ipa:r[4] }));
 const TOTAL_WORDS = WORDS.length;
 const CAT_BY_ID = {};
 VOCAB_CATEGORIES.forEach(c=>{ CAT_BY_ID[c.id] = c; });
@@ -220,6 +220,7 @@ function showFlashCard(){
   document.getElementById('flashProgress').textContent = `Thẻ ${flashIdx+1}/${flashQueue.length}`;
   document.getElementById('flashCat').textContent = CAT_BY_ID[w.cat].title;
   document.getElementById('flashWord').textContent = w.term;
+  document.getElementById('flashIpa').textContent = w.ipa;
   document.getElementById('flashPos').textContent = POS_LABEL[w.pos]||w.pos;
   document.getElementById('flashVi').style.display='none';
   document.getElementById('flashVi').textContent = w.vi;

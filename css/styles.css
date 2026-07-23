@@ -266,6 +266,7 @@ a, button:focus-visible, [tabindex]:focus-visible, input:focus-visible{
 .badge-mark.known{ background:var(--state-success-soft); color:var(--state-success); }
 .badge-mark.unknown{ background:var(--state-danger-soft); color:var(--state-danger); }
 .flash-word{ font-family:var(--font-display); font-size:var(--text-display-sm); font-weight:var(--weight-semibold); color:var(--text-heading); word-break:break-word; }
+.flash-ipa{ font-family:var(--font-mono); font-size:var(--text-body-md); color:var(--text-muted); margin-top:-8px; }
 .flash-pos{ font-family:var(--font-mono); font-size:12px; color:var(--blue-700); background:var(--surface-brand-soft); display:inline-block; padding:3px 10px; border-radius:var(--radius-full); }
 .flash-vi{ font-size:var(--text-h3); color:var(--text-body); margin-top:6px; }
 .speak-btn{
